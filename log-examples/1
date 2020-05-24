@@ -1,0 +1,446 @@
+Note: Google Test filter = All/RenderFrameHostManagerTest.ReceivedFramePolicyAfterNavigationStarted/0:All/RenderFrameHostManagerTest.ReceivedFramePolicyAfterNavigationStarted/1
+[==========] Running 2 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 2 tests from All/RenderFrameHostManagerTest
+[ RUN      ] All/RenderFrameHostManagerTest.ReceivedFramePolicyAfterNavigationStarted/0
+[28239:28239:0524/151704.131822:2014629968427:VERBOSE1:field_trial.cc(388)] Field trial: scoped_feature_list_trial_for_RenderDocument Group choice:scoped_feature_list_trial_group
+[28239:28239:0524/151704.165937:2014630002539:VERBOSE1:node.cc(492)] Merging local ports 49FC5D3AF9C46ACD.D2681ECDC6B8EEE2@4529732ACA10729.C494916AAC35E83A and 4BC61E41EF05AC9.4CADC72E4B3FF708@4529732ACA10729.C494916AAC35E83A
+[28239:28239:0524/151704.197074:2014630033676:VERBOSE1:http_response_headers.cc(636)] missing status line
+[28239:28239:0524/151704.197127:2014630033726:VERBOSE1:http_response_headers.cc(692)] assuming HTTP/1.0
+[28239:28239:0524/151704.197193:2014630033793:VERBOSE1:http_response_headers.cc(700)] missing response status; assuming 200 OK
+[28239:28239:0524/151704.202553:2014630039154:VERBOSE1:navigation_controller_impl.cc(1175)] Navigation finished at (smoothed) timestamp 11646488229962269
+[28239:28239:0524/151704.204090:2014630040690:ERROR:render_widget_host_view_base.cc(177)] Not implemented reached in virtual uint32_t content::RenderWidgetHostViewBase::GetCaptureSequenceNumber() const
+[28239:28243:0524/151704.221558:2014630058175:VERBOSE1:simple_index_file.cc(600)] Simple Cache Index is being restored from disk.
+[28239:28246:0524/151704.221746:2014630058365:VERBOSE1:simple_index_file.cc(600)] Simple Cache Index is being restored from disk.
+[28239:28239:0524/151704.233163:2014630069764:VERBOSE1:configured_proxy_resolution_service.cc(874)] PAC support disabled because there is no system implementation
+[28239:28239:0524/151704.233535:2014630070135:VERBOSE1:network_connection.cc(30)] Updating NetworkConnection's Cached Data
+[28239:28239:0524/151704.235764:2014630072365:VERBOSE1:histogram.cc(444)] Histogram: SimpleCache.Code.IndexNumEntriesOnWrite has bad minimum: 0
+[28239:28239:0524/151704.235956:2014630072556:VERBOSE1:histogram.cc(444)] Histogram: SimpleCache.Code.IndexInitializationWaiters has bad minimum: 0
+[28239:28239:0524/151704.236037:2014630072636:VERBOSE1:histogram.cc(444)] Histogram: SimpleCache.Code.IndexNumEntriesOnInit has bad minimum: 0
+[       OK ] All/RenderFrameHostManagerTest.ReceivedFramePolicyAfterNavigationStarted/0 (150 ms)
+[ RUN      ] All/RenderFrameHostManagerTest.ReceivedFramePolicyAfterNavigationStarted/1
+[28239:28239:0524/151704.278195:2014630114796:VERBOSE1:field_trial.cc(388)] Field trial: scoped_feature_list_trial_for_RenderDocument Group choice:scoped_feature_list_trial_group
+[28239:28239:0524/151704.294123:2014630130723:VERBOSE1:node.cc(492)] Merging local ports 7DE1BEDA70E93F8F.29DE6F5761803146@4529732ACA10729.C494916AAC35E83A and E69A200AE28678E2.661CE98C8B0E62AB@4529732ACA10729.C494916AAC35E83A
+[28239:28239:0524/151704.313823:2014630150424:VERBOSE1:http_response_headers.cc(636)] missing status line
+[28239:28239:0524/151704.313870:2014630150469:VERBOSE1:http_response_headers.cc(692)] assuming HTTP/1.0
+[28239:28239:0524/151704.313907:2014630150506:VERBOSE1:http_response_headers.cc(700)] missing response status; assuming 200 OK
+[28239:28239:0524/151704.318406:2014630155006:VERBOSE1:navigation_controller_impl.cc(1175)] Navigation finished at (smoothed) timestamp 11646488230112857
+[28239:28251:0524/151704.333501:2014630170116:VERBOSE1:simple_index_file.cc(600)] Simple Cache Index is being restored from disk.
+[28239:28255:0524/151704.333670:2014630170287:VERBOSE1:simple_index_file.cc(600)] Simple Cache Index is being restored from disk.
+[28239:28239:0524/151704.342568:2014630179169:VERBOSE1:configured_proxy_resolution_service.cc(874)] PAC support disabled because there is no system implementation
+[28239:28239:0524/151704.342758:2014630179358:VERBOSE1:network_connection.cc(30)] Updating NetworkConnection's Cached Data
+[       OK ] All/RenderFrameHostManagerTest.ReceivedFramePolicyAfterNavigationStarted/1 (101 ms)
+[----------] 2 tests from All/RenderFrameHostManagerTest (257 ms total)
+
+[----------] Global test environment tear-down
+[==========] 2 tests from 1 test suite ran. (261 ms total)
+[  PASSED  ] 2 tests.
+[28239:28239:0524/151704.383763:2014630220364:VERBOSE1:statistics_recorder.cc(428)] Collections of all histograms
+Histogram: BackgroundFetch.IncompleteFetchesOnStartup recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: BackgroundFetch.Storage.CleanupTask recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: BackgroundFetch.Storage.GetInitializationDataTask recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: BrowserRenderProcessHost.SpareProcessMaybeTakeAction recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Cookie.CookieSourceScheme recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: Cookie.Count recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: Cookie.ExpirationDurationMinutes recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: Cookie.TimeBlockedOnLoad recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: Cookie.Type recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: GPU.EGLDisplayType recorded 1 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: NQE.CachedNetworkQualityAvailable recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: NQE.EffectiveConnectionType.OnECTComputation recorded 8 samples, mean = 5.0 (flags = 0x1)
+0  ... 
+5  ------------------------------------------------------------------------O (8 = 100.0%) {0.0%}
+6  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: NQE.Kbps.ObservationSource recorded 2 samples, mean = 4.0
+0  ... 
+4  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+5  ... 
+
+Histogram: NQE.Kbps.OnECTComputation recorded 4 samples, mean = 1961.0 (flags = 0x1)
+0     ... 
+1774  ------------------------------------------------------------------------O (4 = 100.0%) {0.0%}
+2336  ... 
+
+Histogram: NQE.RTT.ObservationSource recorded 4 samples, mean = 5.5 (flags = 0x1)
+0  ... 
+4  ------------------------------------------------------------------------O (2 = 50.0%) {0.0%}
+5  ... 
+7  ------------------------------------------------------------------------O (2 = 50.0%) {50.0%}
+8  ... 
+
+Histogram: NQE.RTT.OnECTComputation recorded 8 samples, mean = 115.0 (flags = 0x1)
+0    ... 
+114  ------------------------------------------------------------------------O (8 = 100.0%) {0.0%}
+135  ... 
+
+Histogram: NQE.TransportRTT.OnECTComputation recorded 6 samples, mean = 55.0 (flags = 0x1)
+0   ... 
+48  ------------------------------------------------------------------------O (6 = 100.0%) {0.0%}
+57  ... 
+
+Histogram: Navigation.IsLockedProcess recorded 2 samples, mean = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: Navigation.IsLockedProcess.HTTPOrHTTPS recorded 2 samples, mean = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: Navigation.IsSameBrowsingInstance recorded 2 samples, mean = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: Navigation.IsSameProcess recorded 2 samples, mean = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: Navigation.IsSameProcess.NewNavigation recorded 2 samples, mean = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: Navigation.IsSameSiteInstance recorded 2 samples, mean = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: Navigation.IsSameSiteInstance.MainFrame recorded 2 samples, mean = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: Navigation.MainFrame.FrameCount recorded 2 samples, mean = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: Navigation.MainFrame.MaxFrameCount recorded 2 samples, mean = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: Navigation.ReadyToCommitUntilCommit2 recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Navigation.ReadyToCommitUntilCommit2.ForegroundProcessPriority recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Navigation.ReadyToCommitUntilCommit2.NewNavigation recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Navigation.RequiresDedicatedProcess recorded 2 samples, mean = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: Navigation.RequiresDedicatedProcess.HTTPOrHTTPS recorded 2 samples, mean = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: Navigation.StartToCommit recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Navigation.StartToCommit.ForegroundProcessPriority recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Navigation.StartToCommit.MainFrame recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Navigation.StartToCommit.MainFrame.ForegroundProcessPriority recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Navigation.StartToCommit.MainFrame.NewNavigation recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Navigation.StartToCommit.NewNavigation recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Navigation.StartToCommit.SameProcess recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Navigation.StartToCommit.SameProcess.ForegroundProcessPriority recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Navigation.StartToCommit.SameProcess.MainFrame recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Navigation.StartToCommit.SameProcess.MainFrame.ForegroundProcessPriority recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Navigation.StartToCommit.SameProcess.MainFrame.NewNavigation recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Navigation.StartToCommit.SameProcess.NewNavigation recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Navigation.TimeToReadyToCommit2 recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Navigation.TimeToReadyToCommit2.MainFrame recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Navigation.TimeToReadyToCommit2.MainFrame.NewNavigation recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Navigation.TimeToReadyToCommit2.NewNavigation recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Navigation.TimeToReadyToCommit2.SameProcess recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Navigation.TimeToReadyToCommit2.SameProcess.NewNavigation recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Net.Certificate.IgnoreCertificateErrorsSPKIListPresent recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Net.Certificate.IgnoreErrors recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Net.HttpResponseCode recorded 2 samples, mean = 200.0 (flags = 0x1)
+0    ... 
+200  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+201  ... 
+
+Histogram: Net.KeepaliveStatisticsRecorder.PeakInflightRequests2 recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Net.KeepaliveStatisticsRecorder.PeakInflightRequestsPerTopLevelFrame recorded 4 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (4 = 100.0%)
+1  ... 
+
+Histogram: Net.NumQuicSessionsAtShutdown recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Net.QuicSession.CloseAllSessionsError recorded 2 samples (flags = 0x1)
+3  ------------------------------------------------------------------------O (2 = 100.0%)
+
+Histogram: NetworkService.TimeToFirstResponse recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+10 ... 
+
+Histogram: NetworkService.TimeToFirstResponse.OnStartup recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+10 ... 
+
+Histogram: ResourceScheduler.ActiveSchedulerClientsCount recorded 4 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (4 = 100.0%)
+1  ... 
+
+Histogram: ServiceWorker.RegisteredOriginCount recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: ServiceWorkerCache.BackgroundSyncManager.Scheduler.IsOperationSlow recorded 6 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (6 = 100.0%)
+1  ... 
+
+Histogram: ServiceWorkerCache.BackgroundSyncManager.Scheduler.OperationDuration2 recorded 6 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (6 = 100.0%)
+1  ... 
+
+Histogram: ServiceWorkerCache.BackgroundSyncManager.Scheduler.QueueDuration2 recorded 6 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (6 = 100.0%)
+1  ... 
+
+Histogram: ServiceWorkerCache.BackgroundSyncManager.Scheduler.QueueLength recorded 6 samples, mean = 0.3 (flags = 0x1)
+0  ------------------------------------------------------------------------O (4 = 66.7%)
+1  ------------------------------------O                                     (2 = 33.3%) {66.7%}
+2  ... 
+
+Histogram: SimpleCache.Code.CacheSizeOnInit recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1000... 
+
+Histogram: SimpleCache.Code.ConsistencyResult recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: SimpleCache.Code.CreationToIndex recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: SimpleCache.Code.IndexCreatedEntryCount recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: SimpleCache.Code.IndexEntriesRestored recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: SimpleCache.Code.IndexInitializationWaiters recorded 2 samples, mean = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: SimpleCache.Code.IndexInitializeMethod recorded 2 samples, mean = 2.0 (flags = 0x1)
+0  ... 
+2  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+3  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: SimpleCache.Code.IndexNumEntriesOnInit recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: SimpleCache.Code.IndexNumEntriesOnWrite recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: SimpleCache.Code.IndexRestoreTime recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+10 ... 
+
+Histogram: SimpleCache.Code.IndexWriteReason recorded 2 samples, mean = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: SimpleCache.Code.IndexWriteToDiskTime.Foreground recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: SimpleCache.Code.MaxCacheSizeOnInit recorded 2 samples, mean = 327680.0 (flags = 0x1)
+0       ... 
+297881  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+339058  ... 
+
+Histogram: SimpleCache.Code.PercentFullOnInit recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Storage.Blob.CreateDirectoryResult recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (2 = 100.0%)
+1  ... 
+
+Histogram: Storage.Blob.MaxDiskSpace2 recorded 2 samples, mean = 18983.0 (flags = 0x1)
+0      ... 
+16063  ------------------------------------------------------------------------O (2 = 100.0%) {0.0%}
+21156  ... 
+
+Histogram: V8.Initializer.LoadV8Snapshot.Result recorded 1 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: V8.Initializer.OpenV8File.Result recorded 1 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+
+[1/2] All/RenderFrameHostManagerTest.ReceivedFramePolicyAfterNavigationStarted/0 (150 ms)
+[2/2] All/RenderFrameHostManagerTest.ReceivedFramePolicyAfterNavigationStarted/1 (101 ms)
+SUCCESS: all tests passed.
+Tests took 1 seconds.
+[28235:28235:0524/151704.710509:2014630547116:VERBOSE1:statistics_recorder.cc(428)] Collections of all histograms
+Histogram: MPArch.ForkTime recorded 1 samples, mean = 3.0 (flags = 0x1)
+0  ... 
+3  ------------------------------------------------------------------------O (1 = 100.0%) {0.0%}
+4  ... 
+
+Histogram: ThreadPool.DetachDuration.TestLauncher.Foreground recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: ThreadPool.HeartbeatLatencyMicroseconds.TestLauncher.BackgroundTaskPriority recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: ThreadPool.HeartbeatLatencyMicroseconds.TestLauncher.UserBlockingTaskPriority recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: ThreadPool.HeartbeatLatencyMicroseconds.TestLauncher.UserVisibleTaskPriority recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: ThreadPool.NumActiveWorkers.TestLauncher.Foreground recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: ThreadPool.NumTasksBeforeDetach.TestLauncher.Foreground recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: ThreadPool.NumTasksRunWhileQueuing.TestLauncher.BackgroundTaskPriority recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: ThreadPool.NumTasksRunWhileQueuing.TestLauncher.UserBlockingTaskPriority recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: ThreadPool.NumTasksRunWhileQueuing.TestLauncher.UserVisibleTaskPriority recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: ThreadPool.NumWorkers.TestLauncher.Foreground recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: ThreadPool.TaskLatencyMicroseconds.TestLauncher.BackgroundTaskPriority recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: ThreadPool.TaskLatencyMicroseconds.TestLauncher.UserBlockingTaskPriority recorded 2 samples, mean = 657668.5 (flags = 0x1)
+0      ... 
+218    ------------------------------------------------------------------------O (1 = 50.0%) {0.0%}
+263    ... 
+20000  ------------------------------------------------------------------------O (1 = 50.0%) {50.0%}
+
+Histogram: ThreadPool.TaskLatencyMicroseconds.TestLauncher.UserVisibleTaskPriority recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: V8.Initializer.LoadV8Snapshot.Result recorded 1 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 
+
+Histogram: V8.Initializer.OpenV8File.Result recorded 1 samples, mean = 0.0 (flags = 0x1)
+0  ------------------------------------------------------------------------O (1 = 100.0%)
+1  ... 

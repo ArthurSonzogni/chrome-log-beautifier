@@ -2,15 +2,6 @@
 
 Make Chrome log fancy.
 
-## Usage
-```bash
-chrome-log-beautifier logfile
-```
-Or you can even stream the logs:
-```bash
-chrome --v=2 | chrome-log-beautifier
-```
-
 ## Features:
   - Streaming supported. E.g.  ``` chrome | chrome-log-beautifier```
   - Colorization.
@@ -23,7 +14,17 @@ chrome --v=2 | chrome-log-beautifier
   - Support StackTraces. Find a way to smartly attribute the trace to its emitting threads.
   - Find the process type (browser, renderer, GPU). Is this possible?
 
-## Install:
+
+## Usage
+```bash
+chrome-log-beautifier logfile
+```
+Or you can even stream the logs:
+```bash
+chrome --v=2 | chrome-log-beautifier
+```
+
+## Installation:
 Install build tools:
 ```
   sudo apt install git cmake build-essential

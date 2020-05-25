@@ -14,13 +14,13 @@ std::map<std::wstring, LogStyle> log_style = {
     {L"UNKNOWN", {nothing, dim}},
     {L"GTEST", {color(Color::Green), color(Color::Green)}},
     {L"FATAL", {color(Color::Red), bold}},
-    {L"ERROR", {color(Color::Red), bold}},
+    {L"ERROR", {color(Color::RedLight), bold}},
     {L"WARNING", {color(Color::Yellow), nothing}},
-    {L"INFO", {color(Color::White), dim}},
-    {L"VERBOSE1", {color(Color::White), dim}},
+    {L"INFO", {color(Color::Blue), dim}},
+    {L"VERBOSE1", {color(Color::Cyan), dim}},
     {L"VERBOSE2", {color(Color::White), dim}},
-    {L"VERBOSE3", {color(Color::White), dim}},
-    {L"VERBOSE4", {color(Color::White), dim}},
+    {L"VERBOSE3", {color(Color::GrayLight), dim}},
+    {L"VERBOSE4", {color(Color::GrayDark), dim}},
 };
 }  // namespace
 
@@ -28,9 +28,9 @@ Element LogDisplayer::Render(std::vector<ParsedLine> lines) {
   size = lines.size();
 
   Elements list;
-  int size_level = 0;
-  int size_file = 0;
-  int thread_size = 0;
+  int size_level = 5;
+  int size_file = 10;
+  int thread_size = 6;
 
   for (auto& it : lines) {
     size_level = std::max(size_level, (int)it.level.size());

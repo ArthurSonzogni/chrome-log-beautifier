@@ -10,9 +10,13 @@
 
 #include "ui/main_component.hpp"
 
-void LineProducer(int fd, Sender<std::wstring> sender) {
+// Read from the file descriptor |fd|. Produce line of log and send them to
+// |sender|. The |screen| wakes up when this happens.
+void LineProducer(int fd,
+                  Sender<std::wstring> sender,
+                  ScreenInteractive* screen) {
   std::string line;
-  int buffer_size = 100;
+  int buffer_size = 1000;
   char buffer[buffer_size];
   while (true) {
     int c = read(fd, buffer, buffer_size);
@@ -25,12 +29,13 @@ void LineProducer(int fd, Sender<std::wstring> sender) {
       }
     }
 
+    // Refresh the screen:
+    screen->PostEvent(Event::Custom);
+
     if (c == 0) {
       using namespace std::chrono_literals;
       std::this_thread::sleep_for(0.5s);
     }
-      using namespace std::chrono_literals;
-      std::this_thread::sleep_for(0.1s);
   }
 }
 
@@ -45,26 +50,18 @@ int main(int argument_count, char** arguments) {
   } else {
     log_fd = dup(fileno(stdin));
   }
-  // Reroute stdin to /dev/tty
+  // Reroute stdin to /dev/tty to handle user input.
   stdin = freopen("/dev/tty", "r", stdin);
 
-  // Read the file from a thread.
   auto line_receiver = MakeReceiver<std::wstring>();
-  std::thread line_producer_thread(LineProducer, log_fd,
-                                   line_receiver->MakeSender());
-
+  auto line_sender = line_receiver->MakeSender();
 
   auto screen = ScreenInteractive::Fullscreen();
   MainComponent component(std::move(line_receiver));
 
-  std::thread refresher([&] {
-    while (true) {
-      screen.PostEvent(Event::Custom);
-      using namespace std::chrono_literals;
-      std::this_thread::sleep_for(0.5s);
-    }
-  });
-
+  // Read from the log file.
+  std::thread line_producer_thread(LineProducer, log_fd, std::move(line_sender),
+                                   &screen);
   screen.Loop(&component);
 
   close(log_fd);

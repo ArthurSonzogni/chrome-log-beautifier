@@ -97,24 +97,30 @@ Element MainComponent::Render() {
   }
   std::vector<ParsedLine> filtered_lines;
 
-  for (auto& it : lines_) {
-    if (allowed_level.count(it.level) &&
-        allowed_thread.count(it.translated_thread_id)) {
-      filtered_lines.push_back(it);
+  for(auto it = lines_.rbegin(); it != lines_.rend(); ++it) {
+    if (allowed_level.count(it->level) &&
+        allowed_thread.count(it->translated_thread_id)) {
+      filtered_lines.push_back(*it);
     }
   }
 
   Elements thread_filter_document;
-  bool is_first = true;
+  thread_filter_document.push_back(vbox({
+    text(L"Process:") | bold,
+    separator(),
+    text(L"Thread:") | bold,
+    filler()
+  }));
   for (auto key : thread_filters_order_) {
     Elements checkboxes;
+    wchar_t c = key;
+    std::wstring c_str;
+    c_str += c;
+    checkboxes.push_back(text(c_str));
+    checkboxes.push_back(separator());
     for (auto& [id, checkbox] : thread_filters_[key]->checkboxes)
       checkboxes.push_back(checkbox->Render());
-    if (!is_first) {
-      thread_filter_document.push_back(text(L" "));
-      thread_filter_document.push_back(separator());
-    }
-    is_first = false;
+    thread_filter_document.push_back(separator());
     thread_filter_document.push_back(vbox(checkboxes));
   }
 
@@ -124,7 +130,7 @@ Element MainComponent::Render() {
               window(text(L" Log level"), container_level_filter_.Render()) |
                   notflex,
               text(L" "),
-              window(text(L" Process/Thread"), hbox(thread_filter_document)) |
+              window(text(L"Filter"), hbox(thread_filter_document)) |
                   notflex,
               filler(),
               spinner(5, i++),

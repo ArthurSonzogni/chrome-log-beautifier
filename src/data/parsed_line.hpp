@@ -1,5 +1,5 @@
-#ifndef PARSED_LINE_H
-#define PARSED_LINE_H
+#ifndef DATA_PARSED_LINE_HPP
+#define DATA_PARSED_LINE_HPP
 
 #include <string>
 
@@ -34,4 +34,4 @@ struct ParsedLine {
   std::wstring log;
 };
 
-#endif /* end of include guard: PARSED_LINE_H */
+#endif /* end of include guard: DATA_PARSED_LINE_HPP */

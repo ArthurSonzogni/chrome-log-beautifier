@@ -1,0 +1,60 @@
+name: chrome-log-beautifier
+version: '1.0'
+summary: An interactive terminal UI for analysing Chrome logs.
+description: |
+  An interactive terminal UI for analysing Chrome logs.
+
+  Features:
+    - Inte
+    - Filter by
+
+grade: stable
+confinement: strict
+base: core18
+
+apps:
+  chrome-log-beautifier:
+    command: chrome-log-beautifier
+
+parts:
+  # Build cmake from source to get a recent version.
+  cmake:
+    source: https://github.com/Kitware/CMake
+    source-type: git
+    source-depth: 1
+    plugin: cmake
+    override-build: |
+      mkdir -p build
+      cd build
+      cmake \
+        -DCMAKE_INSTALL_PREFIX=$SNAPCRAFT_STAGE/cmake \
+        $SNAPCRAFT_PART_SRC
+      make -j 4
+      make install
+    build-packages:
+      - build-essential
+      - libssl-dev
+      - libncurses5-dev
+    stage-packages:
+      - libssl1.1
+      - libncurses5
+      - libtinfo5
+
+  #  https://github.com/ArthurSonzogni/chrome-log-beautifier
+  chrome-log-beautifier:
+    after: [cmake]
+    plugin: cmake
+    source: https://github.com/ArthurSonzogni/chrome-log-beautifier
+    source-type: git
+    source-depth: 1
+    override-build: |
+      $SNAPCRAFT_STAGE/cmake/bin/cmake \
+        -DCMAKE_INSTALL_PREFIX=$SNAPCRAFT_PART_INSTALL \
+        -DCMAKE_BUILD_TYPE=Release \
+        $SNAPCRAFT_PART_SRC
+      make -j 4
+      make install
+
+passthrough:
+  title: chrome-log-beautifier
+  license: MIT

@@ -7,7 +7,7 @@
 #include <ftxui/component/receiver.hpp>
 #include <map>
 
-#include "parsed_line.hpp"
+#include "data/parsed_line.hpp"
 #include "ui/log_displayer.hpp"
 
 using namespace ftxui;

@@ -3,7 +3,7 @@
 
 #include <ftxui/component/component.hpp>
 
-#include "parsed_line.hpp"
+#include "data/parsed_line.hpp"
 
 using namespace ftxui;
 

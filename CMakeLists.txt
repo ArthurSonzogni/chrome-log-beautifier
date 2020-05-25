@@ -19,13 +19,13 @@ project(chrome-log-beautifier
 )
 
 add_executable(chrome-log-beautifier
-  src/parsed_line.hpp
-  src/parsed_line.cpp
+  src/data/parsed_line.cpp
+  src/data/parsed_line.hpp
   src/main.cpp
-  src/ui/main_component.cpp
-  src/ui/main_component.hpp
   src/ui/log_displayer.cpp
   src/ui/log_displayer.hpp
+  src/ui/main_component.cpp
+  src/ui/main_component.hpp
 )
 target_include_directories(chrome-log-beautifier PRIVATE src)
 

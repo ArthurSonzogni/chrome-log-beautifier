@@ -16,7 +16,7 @@ void LineProducer(int fd,
                   Sender<std::wstring> sender,
                   ScreenInteractive* screen) {
   std::string line;
-  int buffer_size = 1000;
+  int buffer_size = 1 << 10;
   char buffer[buffer_size];
   while (true) {
     int c = read(fd, buffer, buffer_size);

@@ -10,8 +10,9 @@ using namespace ftxui;
 class LogDisplayer : public Component {
  public:
   LogDisplayer() = default;
-  Element Render(std::vector<ParsedLine> lines);
+  Element Render(std::vector<ParsedLine*> lines);
   bool OnEvent(Event) override;
+  int selected() { return selected_; }
 
  private:
   int selected_ = 0;

@@ -5,10 +5,12 @@
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/container.hpp>
 #include <ftxui/component/receiver.hpp>
+#include <ftxui/component/toggle.hpp>
 #include <map>
 
 #include "data/parsed_line.hpp"
 #include "ui/log_displayer.hpp"
+#include "ui/info_component.hpp"
 
 using namespace ftxui;
 
@@ -38,18 +40,15 @@ class MainComponent : public Component {
   std::map<int, std::unique_ptr<ThreadFilter>> thread_filters_;
   std::vector<int> thread_filters_order_;
 
-  // container_main_ (vertical)
-  // ├──container_level_ (horizontal)
-  // │   ├──container_level_filter_
-  // │   └──container_thread_filter_ (horizontal)
-  // │       └── thread_filter_container *
-  // └──log_displayer_
-
-  Container container_main_ = Container::Vertical();
-  Container container_filter_ = Container::Horizontal();
-  Container container_level_filter_ = Container::Vertical();
-  Container container_thread_filter_ = Container::Horizontal();
-  LogDisplayer log_displayer_;
+  /**/ Container container_main_ = Container::Vertical();
+  /****/ Toggle toggle_;
+  /****/ Container tab_ = Container::Tab(&toggle_.selected);
+  /******/ Container tab_filter_ = Container::Vertical();
+  /********/ Container tab_filter_tools_ = Container::Horizontal();
+  /**********/ Container container_level_filter_ = Container::Vertical();
+  /**********/ Container container_thread_filter_ = Container::Horizontal();
+  /*******/  LogDisplayer log_displayer_[2];
+  /*******/  InfoComponent info_component_;
 };
 
 #endif /* end of include guard: UI_MAIN_COMPONENT_HPP */

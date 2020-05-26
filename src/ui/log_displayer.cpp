@@ -24,7 +24,7 @@ std::map<std::wstring, LogStyle> log_style = {
 };
 }  // namespace
 
-Element LogDisplayer::Render(std::vector<ParsedLine> lines) {
+Element LogDisplayer::Render(std::vector<ParsedLine*> lines) {
   size = lines.size();
 
   Elements list;
@@ -33,9 +33,9 @@ Element LogDisplayer::Render(std::vector<ParsedLine> lines) {
   int thread_size = 6;
 
   for (auto& it : lines) {
-    size_level = std::max(size_level, (int)it.level.size());
-    size_file = std::max(size_file, (int)it.file.size());
-    thread_size = std::max(thread_size, (int)it.translated_thread_id.size());
+    size_level = std::max(size_level, (int)it->level.size());
+    size_file = std::max(size_file, (int)it->file.size());
+    thread_size = std::max(thread_size, (int)it->translated_thread_id.size());
   }
 
   auto header = hbox({
@@ -51,17 +51,17 @@ Element LogDisplayer::Render(std::vector<ParsedLine> lines) {
       text(L"Time") | dim | ftxui::size(WIDTH, EQUAL, 14) | notflex,
   });
 
-  int previous_type = lines.size() ? lines[0].type : -1;
+  int previous_type = lines.size() ? lines[0]->type : -1;
 
   int index = 0;
   for (auto& it : lines) {
     bool is_focus = (index++ == selected_);
-    if (previous_type != it.type)
+    if (previous_type != it->type)
       list.push_back(separator());
-    previous_type = it.type;
+    previous_type = it->type;
 
-    Decorator line_decorator = log_style[it.level].line_decorator;
-    Decorator level_decorator = log_style[it.level].level_decorator;
+    Decorator line_decorator = log_style[it->level].line_decorator;
+    Decorator level_decorator = log_style[it->level].level_decorator;
 
     if (is_focus) {
       line_decorator = line_decorator | focus;
@@ -71,31 +71,31 @@ Element LogDisplayer::Render(std::vector<ParsedLine> lines) {
 
     Element document =  //
         hbox({
-            text(it.level) | ftxui::size(WIDTH, EQUAL, size_level) |
+            text(it->level) | ftxui::size(WIDTH, EQUAL, size_level) |
                 level_decorator | notflex,
 
             separator(),
 
-            text(it.translated_thread_id) | ftxui::size(WIDTH, EQUAL, thread_size) | notflex,
+            text(it->translated_thread_id) | ftxui::size(WIDTH, EQUAL, thread_size) | notflex,
             separator(),
 
             hbox({
-                text(it.file),
-                text(it.line) | dim,
+                text(it->file),
+                text(it->line) | dim,
             }) | ftxui::size(WIDTH, EQUAL, size_file),
 
             separator(),
 
-            hbox(paragraph(it.log)) | ftxui::size(WIDTH, EQUAL, 100) | flex,
+            hbox(paragraph(it->log)) | ftxui::size(WIDTH, EQUAL, 100) | flex,
 
             filler(),
             separator(),
             hbox({
-                text(to_wstring(it.minute)),
+                text(to_wstring(it->minute)),
                 text(L":"),
-                text(to_wstring(it.seconds)),
+                text(to_wstring(it->seconds)),
                 text(L" "),
-                text(to_wstring(it.milliseconds)),
+                text(to_wstring(it->milliseconds)),
                 text(L"ms"),
             }) | dim |
                 ftxui::size(WIDTH, EQUAL, 14) | notflex,
@@ -103,6 +103,9 @@ Element LogDisplayer::Render(std::vector<ParsedLine> lines) {
         flex | line_decorator;
     list.push_back(document);
   }
+
+  if (list.empty())
+    list.push_back(text(L"(empty)"));
 
   return window(text(L"Log"), vbox({
                                   header,

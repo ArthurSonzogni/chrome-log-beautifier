@@ -8,11 +8,25 @@ using namespace ftxui;
 
 MainComponent::MainComponent(Receiver<std::wstring> receiver)
     : receiver_(std::move(receiver)) {
-  Add(&container_main_);
-  container_main_.Add(&container_filter_);
-  container_filter_.Add(&container_level_filter_);
-  container_filter_.Add(&container_thread_filter_);
-  container_main_.Add(&log_displayer_);
+  /**/ Add(&container_main_);
+  /****/ container_main_.Add(&toggle_);
+  /****/ container_main_.Add(&tab_);
+  /******/ tab_.Add(&tab_filter_);
+  /********/ tab_filter_.Add(&tab_filter_tools_);
+  /**********/ tab_filter_tools_.Add(&container_level_filter_);
+  /**********/ tab_filter_tools_.Add(&container_thread_filter_);
+  /********/ tab_filter_.Add(&log_displayer_[0]);
+  /******/ tab_.Add(&log_displayer_[1]);
+  /******/ tab_.Add(&info_component_);
+
+  //toggle_.focused_style = bold;
+  //toggle_.selected_style = nothing;
+  //toggle_.normal_style = dim;
+  toggle_.entries = {
+      L"Filter",
+      L"Fullscreen",
+      L"Info",
+  };
 }
 
 bool MainComponent::OnEvent(Event event) {
@@ -58,7 +72,7 @@ void MainComponent::RegisterLogLevel(const std::wstring& log_level) {
 
   checkbox = std::make_unique<CheckBox>();
   checkbox->label = log_level;
-  checkbox->state = true;
+  checkbox->state = log_level != L"UNKNOWN";
   container_level_filter_.Add(checkbox.get());
 }
 
@@ -95,12 +109,13 @@ Element MainComponent::Render() {
         allowed_thread.insert(id);
     }
   }
-  std::vector<ParsedLine> filtered_lines;
+  std::vector<ParsedLine*> filtered_lines;
+  filtered_lines.reserve(lines_.size());
 
-  for(auto it = lines_.rbegin(); it != lines_.rend(); ++it) {
+  for(auto it = lines_.begin(); it != lines_.end(); ++it) {
     if (allowed_level.count(it->level) &&
         allowed_thread.count(it->translated_thread_id)) {
-      filtered_lines.push_back(*it);
+      filtered_lines.push_back(&(*it));
     }
   }
 
@@ -124,18 +139,55 @@ Element MainComponent::Render() {
     thread_filter_document.push_back(vbox(checkboxes));
   }
 
+  int current_line = log_displayer_[std::min(toggle_.selected, 1)].selected();
+
+  auto header = hbox({
+    text(L"chrome-log-beautifier"),
+    filler(),
+    toggle_.Render(),
+    filler(),
+    text(L"["),
+    text(to_wstring(current_line)),
+    text(L"] "),
+    text(to_wstring(filtered_lines.size())),
+    text(L"/"),
+    text(to_wstring(lines_.size())),
+    filler(),
+    spinner(5, i++),
+  });
+
+  Element tab_menu;
+  if (toggle_.selected == 0) {
+    return  //
+        vbox({
+            header,
+            separator(),
+            hbox({
+                window(text(L"Type"), container_level_filter_.Render()) |
+                    notflex,
+                text(L" "),
+                window(text(L"Filter"), hbox(thread_filter_document)) | notflex,
+                filler(),
+            }) | notflex,
+            log_displayer_[0].Render(filtered_lines) | notflex,
+        });
+  }
+
+  if (toggle_.selected == 1) {
+    return  //
+        vbox({
+            header,
+            log_displayer_[1].Render(filtered_lines) | notflex,
+            filler(),
+        });
+  }
+
   return  //
       vbox({
-          hbox({
-              window(text(L" Log level"), container_level_filter_.Render()) |
-                  notflex,
-              text(L" "),
-              window(text(L"Filter"), hbox(thread_filter_document)) |
-                  notflex,
-              filler(),
-              spinner(5, i++),
-          }),
-          log_displayer_.Render(filtered_lines) | notflex,
+          header,
+          separator(),
+          filler(),
+          info_component_.Render() | center,
           filler(),
       });
 }

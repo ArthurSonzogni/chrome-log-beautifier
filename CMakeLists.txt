@@ -26,8 +26,39 @@ add_executable(chrome-log-beautifier
   src/ui/log_displayer.hpp
   src/ui/main_component.cpp
   src/ui/main_component.hpp
+  src/ui/info_component.hpp
+  gen/ui/info_component.cpp
 )
-target_include_directories(chrome-log-beautifier PRIVATE src)
+
+
+#-------------------------------------------------------------------------------
+# Environment variable available in C++ source
+#-------------------------------------------------------------------------------
+
+execute_process(
+  COMMAND git rev-list --count HEAD
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  OUTPUT_VARIABLE git_position
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+execute_process(
+  COMMAND git rev-parse HEAD
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  OUTPUT_VARIABLE git_hash
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+string(TIMESTAMP today "%Y-%m-%d ")
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/ui/info_component.cpp
+  ${CMAKE_CURRENT_BINARY_DIR}/gen/ui/info_component.cpp
+)
+
+target_include_directories(chrome-log-beautifier
+  PRIVATE src
+  PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/gen
+)
 
 target_link_libraries(chrome-log-beautifier
   PRIVATE ftxui::screen

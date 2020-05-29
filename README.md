@@ -1,6 +1,9 @@
 # chrome-log-beautifier
 
-Make Chrome log fancy.
+![logo](./doc/logo.webp)
+
+Make Chrome logs fancy.
+
 
 ## Features:
   - Streaming supported. E.g.  ``` chrome | chrome-log-beautifier```

@@ -49,7 +49,7 @@ void MainComponent::AddLine(std::wstring line) {
 
 void MainComponent::ComputeTranslatedThreadID(ParsedLine& parsed_line) {
   if (parsed_line.process_id == 0) {
-    parsed_line.translated_thread_id = L"None";
+    parsed_line.translated_thread_id = L" ";
     return;
   }
 
@@ -72,7 +72,7 @@ void MainComponent::RegisterLogLevel(const std::wstring& log_level) {
 
   checkbox = std::make_unique<CheckBox>();
   checkbox->label = log_level;
-  checkbox->state = log_level != L"UNKNOWN";
+  checkbox->state = true;
   container_level_filter_.Add(checkbox.get());
 }
 
@@ -142,18 +142,21 @@ Element MainComponent::Render() {
   int current_line = log_displayer_[std::min(toggle_.selected, 1)].selected();
 
   auto header = hbox({
-    text(L"chrome-log-beautifier"),
-    filler(),
-    toggle_.Render(),
-    filler(),
-    text(L"["),
-    text(to_wstring(current_line)),
-    text(L"] "),
-    text(to_wstring(filtered_lines.size())),
-    text(L"/"),
-    text(to_wstring(lines_.size())),
-    filler(),
-    spinner(5, i++),
+      text(L"chrome-log-beautifier"),
+      hcenter(toggle_.Render()),
+      separator(),
+      text(to_wstring(current_line)),
+      text(L"/"),
+      text(to_wstring(filtered_lines.size())),
+      text(L"  ["),
+      text(to_wstring(lines_.size())),
+      text(L"]"),
+      separator(),
+      gauge(float(current_line) /
+            float(std::max(1, (int)filtered_lines.size() - 1))) |
+          color(Color::GrayDark),
+      separator(),
+      spinner(5, i++),
   });
 
   Element tab_menu;

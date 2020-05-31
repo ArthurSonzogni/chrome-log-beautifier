@@ -56,6 +56,18 @@ ParsedLine ParsedLine::Parse(std::wstring line) {
   }
 
   {
+    std::wregex regex( LR"(^\[\d+\/\d+\] (.*)$)");
+    std::wsmatch match;
+    if (std::regex_match(line, match, regex)) {
+      out.level = L"NINJA";
+      out.line = L"";
+      out.log = match[1].str();
+      out.type = ParsedLine::NINJA;
+      return out;
+    }
+  }
+
+  {
     std::wregex regex(LR"(^\[(..........)\] (.*)$)");
     std::wsmatch match;
     if (std::regex_match(line, match, regex)) {

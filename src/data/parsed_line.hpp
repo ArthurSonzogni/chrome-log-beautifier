@@ -10,6 +10,7 @@ struct ParsedLine {
     GTEST,
     LOG,
     UNKNOWN,
+    NINJA,
   };
   Type type;
 

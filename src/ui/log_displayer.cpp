@@ -21,6 +21,7 @@ std::map<std::wstring, LogStyle> log_style = {
     {L"VERBOSE2", {color(Color::White), dim}},
     {L"VERBOSE3", {color(Color::GrayLight), dim}},
     {L"VERBOSE4", {color(Color::GrayDark), dim}},
+    {L"NINJA", {color(Color::Blue), dim}},
 };
 }  // namespace
 
@@ -39,7 +40,7 @@ Element LogDisplayer::Render(std::vector<ParsedLine*> lines) {
   }
 
   auto header = hbox({
-      text(L"Level") | ftxui::size(WIDTH, EQUAL, size_level) | notflex,
+      text(L"Type") | ftxui::size(WIDTH, EQUAL, size_level) | notflex,
       separator(),
       text(L"Thread") | ftxui::size(WIDTH, EQUAL, thread_size) | notflex,
       separator(),

@@ -38,6 +38,7 @@ Element LogDisplayer::RenderLines(std::vector<ParsedLine*> lines) {
     size_file = std::max(size_file, (int)it->file.size());
     thread_size = std::max(thread_size, (int)it->translated_thread_id.size());
   }
+  size_file+=5;
 
   auto header = hbox({
       text(L"Type") | ftxui::size(WIDTH, EQUAL, size_level) | notflex,
@@ -73,11 +74,13 @@ Element LogDisplayer::RenderLines(std::vector<ParsedLine*> lines) {
     Element document =  //
         hbox({
             text(it->level) | ftxui::size(WIDTH, EQUAL, size_level) |
-                level_decorator | notflex,
+                level_decorator,
 
             separator(),
 
-            text(it->translated_thread_id) | ftxui::size(WIDTH, EQUAL, thread_size) | notflex,
+            text(it->translated_thread_id) |
+                ftxui::size(WIDTH, EQUAL, thread_size),
+
             separator(),
 
             hbox({
@@ -87,10 +90,11 @@ Element LogDisplayer::RenderLines(std::vector<ParsedLine*> lines) {
 
             separator(),
 
-            hbox(paragraph(it->log)) | ftxui::size(WIDTH, EQUAL, 100) | flex,
-
+            text(it->log) | ftxui::size(WIDTH, EQUAL, 80),
             filler(),
+
             separator(),
+
             hbox({
                 text(to_wstring(it->minute)),
                 text(L":"),
@@ -101,7 +105,7 @@ Element LogDisplayer::RenderLines(std::vector<ParsedLine*> lines) {
             }) | dim |
                 ftxui::size(WIDTH, EQUAL, 14) | notflex,
         }) |
-        flex | line_decorator;
+        flex_grow | line_decorator;
     list.push_back(document);
   }
 

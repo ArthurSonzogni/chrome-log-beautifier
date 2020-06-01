@@ -174,7 +174,7 @@ Element MainComponent::Render() {
                 window(text(L"Filter"), hbox(thread_filter_document)) | notflex,
                 filler(),
             }) | notflex,
-            log_displayer_[0].RenderLines(filtered_lines) | notflex,
+            log_displayer_[0].RenderLines(filtered_lines) | flex_shrink,
         });
   }
 
@@ -182,7 +182,7 @@ Element MainComponent::Render() {
     return  //
         vbox({
             header,
-            log_displayer_[1].RenderLines(filtered_lines) | notflex,
+            log_displayer_[1].RenderLines(filtered_lines) | flex_shrink,
             filler(),
         });
   }

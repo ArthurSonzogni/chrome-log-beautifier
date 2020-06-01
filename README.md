@@ -43,6 +43,11 @@ chrome --v=2 2>&1 | chrome-log-beautifier
 ```
 
 ## Installation:
+
+### Precompiled package
+Debian and snap packages are available on [this page](https://github.com/ArthurSonzogni/chrome-log-beautifier/releases/).
+
+### Compile from source
 Install build tools:
 ```
   sudo apt install git cmake build-essential

@@ -3,16 +3,19 @@
 [![issues][badge.issues]][issues]
 [![license][badge.license]][license]
 [![contributors][badge.contributors]][contributors]
+[![Snap Status][badge.snap]][snap]
 
 [badge.travis]: https://img.shields.io/travis/com/arthursonzogni/chrome-log-beautifier
 [badge.issues]: https://img.shields.io/github/issues-raw/arthursonzogni/chrome-log-beautifier
 [badge.license]: https://img.shields.io/github/license/arthursonzogni/chrome-log-beautifier?color=black
 [badge.contributors]: https://img.shields.io/github/contributors/arthursonzogni/chrome-log-beautifier?color=blue
+[badge.snap]: https://build.snapcraft.io/badge/ArthurSonzogni/chrome-log-beautifier.svg
 
 [travis]: https://travis-ci.com/ArthurSonzogni/chrome-log-beautifier
 [issues]: https://github.com/ArthurSonzogni/chrome-log-beautifier/issues
 [license]: http://opensource.org/licenses/MIT
 [contributors]: https://github.com/ArthurSonzogni/chrome-log-beautifier/graphs/contributors
+[snap]: https://build.snapcraft.io/user/ArthurSonzogni/chrome-log-beautifier
 
 Make Chrome logs fancy.
 

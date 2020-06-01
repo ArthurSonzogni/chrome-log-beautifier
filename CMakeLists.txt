@@ -5,6 +5,7 @@ include(FetchContent)
 set(FETCHCONTENT_UPDATES_DISCONNECTED TRUE)
 FetchContent_Declare(ftxui
   GIT_REPOSITORY https://github.com/ArthurSonzogni/ftxui
+  GIT_TAG 7f7775ba622140435af9fe8c0b442c3539ab5056
 )
 
 FetchContent_GetProperties(ftxui)
@@ -82,3 +83,7 @@ endif()
 
 
 install(TARGETS chrome-log-beautifier RUNTIME DESTINATION "bin")
+
+set(CPACK_GENERATOR "DEB")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Arthur Sonzogni")
+include(CPack)

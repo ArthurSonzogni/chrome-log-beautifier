@@ -25,7 +25,7 @@ std::map<std::wstring, LogStyle> log_style = {
 };
 }  // namespace
 
-Element LogDisplayer::Render(std::vector<ParsedLine*> lines) {
+Element LogDisplayer::RenderLines(std::vector<ParsedLine*> lines) {
   size = lines.size();
 
   Elements list;

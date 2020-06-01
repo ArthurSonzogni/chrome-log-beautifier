@@ -133,8 +133,10 @@ Element MainComponent::Render() {
     c_str += c;
     checkboxes.push_back(text(c_str));
     checkboxes.push_back(separator());
-    for (auto& [id, checkbox] : thread_filters_[key]->checkboxes)
+    for (auto& [id, checkbox] : thread_filters_[key]->checkboxes) {
+      (void)id;
       checkboxes.push_back(checkbox->Render());
+    }
     thread_filter_document.push_back(separator());
     thread_filter_document.push_back(vbox(checkboxes));
   }
@@ -172,7 +174,7 @@ Element MainComponent::Render() {
                 window(text(L"Filter"), hbox(thread_filter_document)) | notflex,
                 filler(),
             }) | notflex,
-            log_displayer_[0].Render(filtered_lines) | notflex,
+            log_displayer_[0].RenderLines(filtered_lines) | notflex,
         });
   }
 
@@ -180,7 +182,7 @@ Element MainComponent::Render() {
     return  //
         vbox({
             header,
-            log_displayer_[1].Render(filtered_lines) | notflex,
+            log_displayer_[1].RenderLines(filtered_lines) | notflex,
             filler(),
         });
   }

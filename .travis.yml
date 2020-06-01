@@ -1,0 +1,40 @@
+sudo: false
+
+language:
+  - cpp
+
+script:
+  - mkdir build
+  - cd build
+  - cmake ..
+  - cmake --build .
+  - "${EXECUTABLE_NAME}"
+
+notifications:
+  email: false
+
+jobs:
+  include:
+    # Ubuntu
+    - os: linux
+      dist: bionic
+      compiler: gcc
+      env:
+        - EXECUTABLE_NAME="./tests --gtest_color=yes"
+
+    # Ubuntu
+    - os: linux
+      dist: bionic
+      compiler: clang
+      env:
+        - EXECUTABLE_NAME="./tests --gtest_color=yes"
+
+    # OS X
+    - os: osx
+      env:
+        - EXECUTABLE_NAME="./tests --gtest_color=yes"
+
+    # Windows
+    - os: windows
+      env:
+        - EXECUTABLE_NAME="./Debug/tests.exe --gtest_color=yes"

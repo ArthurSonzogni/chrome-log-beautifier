@@ -6,7 +6,7 @@ set(FETCHCONTENT_UPDATES_DISCONNECTED TRUE)
 FetchContent_Declare(ftxui
   GIT_REPOSITORY https://github.com/ArthurSonzogni/ftxui
   #GIT_TAG 7f7775ba622140435af9fe8c0b442c3539ab5056
-  GIT_TAG flex-shrink
+  #GIT_TAG flex-shrink
 )
 
 FetchContent_GetProperties(ftxui)

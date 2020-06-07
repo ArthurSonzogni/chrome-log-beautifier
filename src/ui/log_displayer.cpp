@@ -41,16 +41,15 @@ Element LogDisplayer::RenderLines(std::vector<ParsedLine*> lines) {
   size_file+=5;
 
   auto header = hbox({
-      text(L"Type") | ftxui::size(WIDTH, EQUAL, size_level) | notflex,
+      text(L"Type") | ftxui::size(WIDTH, EQUAL, size_level),
       separator(),
-      text(L"Thread") | ftxui::size(WIDTH, EQUAL, thread_size) | notflex,
+      text(L"Thread") | ftxui::size(WIDTH, EQUAL, thread_size),
       separator(),
       text(L"File") | ftxui::size(WIDTH, EQUAL, size_file),
       separator(),
-      text(L"Message") | flex | ftxui::size(WIDTH, EQUAL, 10),
-      filler(),
+      text(L"Message") | flex,
       separator(),
-      text(L"Time") | dim | ftxui::size(WIDTH, EQUAL, 14) | notflex,
+      text(L"Time") | dim | ftxui::size(WIDTH, EQUAL, 14),
   });
 
   int previous_type = lines.size() ? lines[0]->type : -1;
@@ -73,25 +72,28 @@ Element LogDisplayer::RenderLines(std::vector<ParsedLine*> lines) {
 
     Element document =  //
         hbox({
-            text(it->level) | ftxui::size(WIDTH, EQUAL, size_level) |
-                level_decorator,
-
+            text(it->level)                              //
+                | ftxui::size(WIDTH, EQUAL, size_level)  //
+                | level_decorator                        //
+            ,
             separator(),
-
-            text(it->translated_thread_id) |
-                ftxui::size(WIDTH, EQUAL, thread_size),
-
+            text(it->translated_thread_id)                //
+                | ftxui::size(WIDTH, EQUAL, thread_size)  //
+                | notflex,
             separator(),
 
             hbox({
                 text(it->file),
-                text(it->line) | dim,
-            }) | ftxui::size(WIDTH, EQUAL, size_file),
+                text(it->line)  //
+                    | dim,
+            })                                          //
+                | ftxui::size(WIDTH, EQUAL, size_file)  //
+                | notflex,
 
             separator(),
 
-            text(it->log) | ftxui::size(WIDTH, EQUAL, 80),
-            filler(),
+            text(it->log)  //
+                | flex,
 
             separator(),
 
@@ -102,10 +104,12 @@ Element LogDisplayer::RenderLines(std::vector<ParsedLine*> lines) {
                 text(L" "),
                 text(to_wstring(it->milliseconds)),
                 text(L"ms"),
-            }) | dim |
-                ftxui::size(WIDTH, EQUAL, 14) | notflex,
+            })                                   //
+                | dim                            //
+                | ftxui::size(WIDTH, EQUAL, 14)  //
+                | notflex,
         }) |
-        flex_grow | line_decorator;
+        flex | line_decorator;
     list.push_back(document);
   }
 
@@ -115,7 +119,7 @@ Element LogDisplayer::RenderLines(std::vector<ParsedLine*> lines) {
   return window(text(L"Log"), vbox({
                                   header,
                                   separator(),
-                                  vbox(list) | frame,
+                                  vbox(list) | yframe,
                               }));
 }
 

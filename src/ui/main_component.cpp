@@ -1,6 +1,7 @@
 #include "ui/main_component.hpp"
 
 #include <ftxui/dom/elements.hpp>
+#include <ftxui/component/component.hpp>
 #include <ftxui/screen/string.hpp>
 #include <set>
 
@@ -8,25 +9,21 @@ using namespace ftxui;
 
 MainComponent::MainComponent(Receiver<std::wstring> receiver)
     : receiver_(std::move(receiver)) {
-  /**/ Add(&container_main_);
-  /****/ container_main_.Add(&toggle_);
-  /****/ container_main_.Add(&tab_);
-  /******/ tab_.Add(&tab_filter_);
-  /********/ tab_filter_.Add(&tab_filter_tools_);
-  /**********/ tab_filter_tools_.Add(&container_level_filter_);
-  /**********/ tab_filter_tools_.Add(&container_thread_filter_);
-  /********/ tab_filter_.Add(&log_displayer_[0]);
-  /******/ tab_.Add(&log_displayer_[1]);
-  /******/ tab_.Add(&info_component_);
-
-  //toggle_.focused_style = bold;
-  //toggle_.selected_style = nothing;
-  //toggle_.normal_style = dim;
-  toggle_.entries = {
-      L"Filter",
-      L"Fullscreen",
-      L"Info",
-  };
+  Add(Container::Vertical({
+      toggle_,
+      Container::Tab(&tab_selected_,
+                     {
+                         Container::Vertical({
+                             Container::Horizontal({
+                                 container_level_filter_,
+                                 container_thread_filter_,
+                             }),
+                             log_displayer_1_,
+                         }),
+                         log_displayer_2_,
+                         info_component_,
+                     }),
+  }));
 }
 
 bool MainComponent::OnEvent(Event event) {
@@ -35,7 +32,7 @@ bool MainComponent::OnEvent(Event event) {
     receiver_->Receive(&line);
     AddLine(line);
   }
-  return Component::OnEvent(event);
+  return ComponentBase::OnEvent(event);
 }
 
 void MainComponent::AddLine(std::wstring line) {
@@ -66,14 +63,12 @@ void MainComponent::ComputeTranslatedThreadID(ParsedLine& parsed_line) {
 }
 
 void MainComponent::RegisterLogLevel(const std::wstring& log_level) {
-  auto& checkbox = level_checkbox[log_level];
-  if (checkbox)
+  if (level_checkbox.count(log_level))
     return;
 
-  checkbox = std::make_unique<CheckBox>();
-  checkbox->label = log_level;
-  checkbox->state = true;
-  container_level_filter_.Add(checkbox.get());
+  level_checkbox[log_level] = true;
+  container_level_filter_->Add(
+      Checkbox(log_level.c_str(), &level_checkbox[log_level]));
 }
 
 void MainComponent::RegisterThreadId(const std::wstring& thread_id) {
@@ -81,32 +76,29 @@ void MainComponent::RegisterThreadId(const std::wstring& thread_id) {
   auto& column = thread_filters_[key];
   if (!column) {
     column = std::make_unique<ThreadFilter>();
-    container_thread_filter_.Add(&(column->container));
+    container_thread_filter_->Add(column->container);
     thread_filters_order_.push_back(key);
   }
 
-  auto& checkbox = column->checkboxes[thread_id];
-  if (checkbox)
+  if (column->checkboxes.count(thread_id))
     return;
 
-  checkbox = std::make_unique<CheckBox>();
-  checkbox->label = thread_id;
-  checkbox->state = true;
-  column->container.Add(checkbox.get());
+  column->checkboxes[thread_id] = true;
+  column->container->Add(Checkbox(thread_id, &column->checkboxes[thread_id]));
 }
 
 Element MainComponent::Render() {
   static int i = 0;
   std::set<std::wstring> allowed_level;
   std::set<std::wstring> allowed_thread;
-  for (auto& [level, checkbox] : level_checkbox) {
-    if (checkbox->state)
+  for (auto& [level, state] : level_checkbox) {
+    if (state)
       allowed_level.insert(level);
   }
   for (auto key : thread_filters_order_) {
-    for (auto& [id, checkbox] : thread_filters_[key]->checkboxes) {
-      if (checkbox->state)
-        allowed_thread.insert(id);
+    for (auto& [thread_id, state] : thread_filters_[key]->checkboxes) {
+      if (state)
+        allowed_thread.insert(thread_id);
     }
   }
   std::vector<ParsedLine*> filtered_lines;
@@ -133,19 +125,18 @@ Element MainComponent::Render() {
     c_str += c;
     checkboxes.push_back(text(c_str));
     checkboxes.push_back(separator());
-    for (auto& [id, checkbox] : thread_filters_[key]->checkboxes) {
-      (void)id;
-      checkboxes.push_back(checkbox->Render());
-    }
+    checkboxes.push_back(thread_filters_[key]->container->Render());
     thread_filter_document.push_back(separator());
     thread_filter_document.push_back(vbox(checkboxes));
   }
 
-  int current_line = log_displayer_[std::min(toggle_.selected, 1)].selected();
+  int current_line =
+      (std::min(tab_selected_, 1) == 0 ? log_displayer_1_ : log_displayer_2_)
+          ->selected();
 
   auto header = hbox({
       text(L"chrome-log-beautifier"),
-      hcenter(toggle_.Render()),
+      hcenter(toggle_->Render()),
       separator(),
       text(to_wstring(current_line)),
       text(L"/"),
@@ -162,27 +153,27 @@ Element MainComponent::Render() {
   });
 
   Element tab_menu;
-  if (toggle_.selected == 0) {
+  if (tab_selected_ == 0) {
     return  //
         vbox({
             header,
             separator(),
             hbox({
-                window(text(L"Type"), container_level_filter_.Render()) |
+                window(text(L"Type"), container_level_filter_->Render()) |
                     notflex,
                 text(L" "),
                 window(text(L"Filter"), hbox(thread_filter_document)) | notflex,
                 filler(),
             }) | notflex,
-            log_displayer_[0].RenderLines(filtered_lines) | flex_shrink,
+            log_displayer_1_->RenderLines(filtered_lines) | flex_shrink,
         });
   }
 
-  if (toggle_.selected == 1) {
+  if (tab_selected_ == 1) {
     return  //
         vbox({
             header,
-            log_displayer_[1].RenderLines(filtered_lines) | flex_shrink,
+            log_displayer_2_->RenderLines(filtered_lines) | flex_shrink,
             filler(),
         });
   }
@@ -192,7 +183,7 @@ Element MainComponent::Render() {
           header,
           separator(),
           filler(),
-          info_component_.Render() | center,
+          info_component_->Render() | center,
           filler(),
       });
 }

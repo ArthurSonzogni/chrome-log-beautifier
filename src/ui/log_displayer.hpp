@@ -7,7 +7,7 @@
 
 using namespace ftxui;
 
-class LogDisplayer : public Component {
+class LogDisplayer : public ComponentBase {
  public:
   LogDisplayer() = default;
   Element RenderLines(std::vector<ParsedLine*> lines);

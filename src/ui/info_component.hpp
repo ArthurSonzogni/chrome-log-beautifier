@@ -5,7 +5,7 @@
 
 using namespace ftxui;
 
-class InfoComponent : public Component {
+class InfoComponent : public ComponentBase {
  public:
   InfoComponent() = default;
   Element Render() override;

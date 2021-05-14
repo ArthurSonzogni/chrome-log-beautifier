@@ -57,12 +57,12 @@ int main(int argument_count, char** arguments) {
   auto line_sender = line_receiver->MakeSender();
 
   auto screen = ScreenInteractive::Fullscreen();
-  MainComponent component(std::move(line_receiver));
+  auto component = std::make_shared<MainComponent>(std::move(line_receiver));
 
   // Read from the log file.
   std::thread line_producer_thread(LineProducer, log_fd, std::move(line_sender),
                                    &screen);
-  screen.Loop(&component);
+  screen.Loop(component);
 
   close(log_fd);
   return EXIT_SUCCESS;

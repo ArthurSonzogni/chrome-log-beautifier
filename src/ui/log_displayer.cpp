@@ -2,6 +2,7 @@
 
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/string.hpp>
+#include <ftxui/component/event.hpp>
 #include <map>
 
 namespace {

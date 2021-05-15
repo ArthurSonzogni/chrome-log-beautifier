@@ -11,18 +11,19 @@ MainComponent::MainComponent(Receiver<std::wstring> receiver)
     : receiver_(std::move(receiver)) {
   Add(Container::Vertical({
       toggle_,
-      Container::Tab(&tab_selected_,
-                     {
-                         Container::Vertical({
-                             Container::Horizontal({
-                                 container_level_filter_,
-                                 container_thread_filter_,
-                             }),
-                             log_displayer_1_,
-                         }),
-                         log_displayer_2_,
-                         info_component_,
-                     }),
+      Container::Tab(
+          {
+              Container::Vertical({
+                  Container::Horizontal({
+                      container_level_filter_,
+                      container_thread_filter_,
+                  }),
+                  log_displayer_1_,
+              }),
+              log_displayer_2_,
+              info_component_,
+          },
+          &tab_selected_),
   }));
 }
 

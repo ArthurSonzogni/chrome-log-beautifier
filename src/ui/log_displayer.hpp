@@ -13,6 +13,7 @@ class LogDisplayer : public ComponentBase {
   Element RenderLines(std::vector<ParsedLine*> lines);
   bool OnEvent(Event) override;
   int selected() { return selected_; }
+  bool Focusable() const override { return true; }
 
  private:
   int selected_ = 0;

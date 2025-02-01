@@ -1,9 +1,7 @@
 #ifndef UI_MAIN_COMPONENT_HPP
 #define UI_MAIN_COMPONENT_HPP
 
-#include <ftxui/component/checkbox.hpp>
 #include <ftxui/component/component.hpp>
-#include <ftxui/component/container.hpp>
 #include <ftxui/component/receiver.hpp>
 #include <ftxui/component/component.hpp>
 #include <map>

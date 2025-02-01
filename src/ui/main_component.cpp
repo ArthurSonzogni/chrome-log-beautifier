@@ -1,9 +1,12 @@
 #include "ui/main_component.hpp"
 
-#include <ftxui/dom/elements.hpp>
 #include <ftxui/component/component.hpp>
+#include <ftxui/component/event.hpp>
+#include <ftxui/component/receiver.hpp>
+#include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/string.hpp>
 #include <set>
+#include <string>
 
 using namespace ftxui;
 

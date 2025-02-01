@@ -5,6 +5,7 @@
 #include <mutex>
 #include <vector>
 #include <memory>
+#include <iostream>
 #include "session.h"
 
 std::string getSessionIdAsString(const SESSION_ID_T* session_id)
@@ -121,8 +122,9 @@ static void on_session_state_changed (
 }
 
 
-static int on_fetch(SESSION_T *session, void *context)
-{
+static int on_fetch(SESSION_T *session, void *context) {
+    auto s1 = static_cast<Session*>(context);
+    s1->onFetchTopic(Topic("COMPL", s1->getSelector(), nullptr, 0));
     Session::getSession().onFetchCompleted(context);
     return HANDLER_SUCCESS;
 }
@@ -132,14 +134,17 @@ static int on_topic(struct session_s *session, const TOPIC_MESSAGE_T *message) {
         auto& s = Session::getSession();
         s.onFetchTopic(Topic(topicType2Str(message->type), message->name,
                              message->payload->data, message->payload->len));
-        buf_free(message->payload);
+        //buf_free(message->payload);
         return HANDLER_SUCCESS;
     }
-    return HANDLER_FAILURE;
+    return HANDLER_SUCCESS;
+    //return HANDLER_FAILURE;
 }
 
 static int on_fetch_error(SESSION_T * session, const DIFFUSION_ERROR_T *error) {
     if (error != nullptr) {
+        auto& s1 = Session::getSession();
+        s1.onFetchTopic(Topic("ERROR", error->message, nullptr, 0));
         Session::getSession().onFetchError(
             Error{static_cast<int>(error->code), std::string(error->message)});
         return HANDLER_SUCCESS;
@@ -152,11 +157,15 @@ static int on_fetch_status_message(SESSION_T *session,
                                    const SVC_FETCH_STATUS_RESPONSE_T *status,
                                    void *context)
 {
+    auto s1 = static_cast<Session*>(context);
+    s1->onFetchTopic(Topic("FETCHSTAT", s1->getSelector() + status->topic_path, nullptr, 0));
     return HANDLER_SUCCESS;
 }
 
 static int on_fetch_discard(struct session_s *session, void *context)
 {
+    auto s1 = static_cast<Session*>(context);
+    s1->onFetchTopic(Topic("DISK", s1->getSelector(), nullptr, 0));
     return HANDLER_SUCCESS;
 }
 
@@ -243,7 +252,7 @@ bool Session::connect(const std::string& url, const std::string& principal, cons
     //session_create_async(m_url.c_str(), m_principal.c_str(), global_credentials, &session_listener, &reconnection_strategy, &callbacks, &error);
 
     auto session = session_create(m_url.c_str(), m_principal.c_str(), m_credentials, &session_listener, &m_rec_strategy, &error);
-    if(m_session != nullptr) {
+    if(session != nullptr) {
         auto& s = getSession();
         s.m_session = session;
         /*char *sid_str = session_id_to_string(session->id);
@@ -271,7 +280,9 @@ void Session::fetch(const std::string& selector)
         params.on_status_message = &on_fetch_status_message;
         params.on_discard = &on_fetch_discard;
         params.context = this;
+        m_selector = selector;
         ::fetch(m_session, params);
+        std::cout << "fetch\n";
     }
     else {
         for (int i = 0; i < 10; ++i) {
@@ -288,6 +299,7 @@ void Session::onFetchTopic(Topic&& t) {
 }
 
 void Session::onFetchError(Error error) {
+
   if (m_fetch_error_callback) {
     m_fetch_error_callback(error);
   }
@@ -301,4 +313,8 @@ void Session::onFetchCompleted(void*) {
 
 void Session::setFetchCompletedCallback(FetchCompleted&& fc) {
     m_fetch_completed_callback = std::move(fc);
+}
+
+void Session::setFetchErrorCallback(FetchError&& fe) {
+    m_fetch_error_callback = std::move(fe);
 }

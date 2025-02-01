@@ -113,6 +113,10 @@ int main(int argc, char** argv) {
     screen.PostEvent(Event::Special("fetch"));
   });
 
+  session.setFetchErrorCallback([&screen](Error error) {
+    screen.PostEvent(Event::Special("fetch"));
+  });
+
   //std::atomic<bool> exit{false};
 
   auto component = std::make_shared<MainComponent>(session, screen.ExitLoopClosure());

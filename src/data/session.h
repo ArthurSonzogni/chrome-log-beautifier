@@ -40,6 +40,10 @@ public:
     return m_session != nullptr;
   }
 
+  std::string getSelector() const {
+    return m_selector;
+  }
+
   bool connect(const std::string& url, const std::string& principal, const std::string& password, std::string& message);
   void fetch(const std::string& selector);
   void onFetchTopic(Topic&&);
@@ -63,6 +67,7 @@ public:
   FetchCompleted m_fetch_completed_callback;
   FetchError  m_fetch_error_callback;
   std::mutex m_fetchMtx;
+  std::string m_selector;
 };
 
 #endif //DMON_SESSION_H

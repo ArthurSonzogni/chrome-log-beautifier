@@ -5,8 +5,7 @@
 #include <ftxui/component/event.hpp>
 #include <map>
 
-#include <locale>
-#include <codecvt>
+#include "data/hexdump.h"
 
 namespace {
 struct LogStyle {
@@ -68,11 +67,13 @@ Element LogDisplayer::RenderLines(const std::vector<Topic>& topics) {
 
     if (is_focus) {
 
-      using convert_type = std::codecvt_utf8<wchar_t>;
-      std::wstring_convert<convert_type, wchar_t> converter;
+      //using convert_type = std::codecvt_utf8<wchar_t>;
+      //std::wstring_convert<convert_type, wchar_t> converter;
 
       //use converter (.to_bytes: wstr->str, .from_bytes: str->wstr)
-      m_seltext = "Content " + std::to_string(index - 1) + ": " + it.m_path;
+      std::stringstream ss;
+      ss << CustomHexdump<32, true>(&it.m_buffer[0], it.m_buffer.size());
+      m_seltext = ss.str();
       //converter.to_bytes( it->log );
       line_decorator = line_decorator | focus;
       if (Focused())

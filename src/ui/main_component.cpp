@@ -155,7 +155,7 @@ Element MainComponent::Render() {
                 //filler(),
             }) | notflex,*/
             log_displayer_1_->RenderLines(m_session.getFetchedTopics()) | flex_shrink,
-            window(text("Content"), hbox(text_box_->Render() | size(ftxui::HEIGHT, ftxui::EQUAL, 6) | xflex_grow, vbox(m_btn_copy_->Render(), m_btn_clear_->Render())))
+            window(text("Content"), hbox(text_box_->Render() | size(ftxui::HEIGHT, ftxui::EQUAL, 10) | xflex_grow, vbox(m_btn_copy_->Render(), m_btn_clear_->Render())))
         });
   }
 

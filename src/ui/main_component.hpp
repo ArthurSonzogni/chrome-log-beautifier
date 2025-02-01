@@ -36,17 +36,6 @@ class MainComponent : public ComponentBase {
   std::map<int, std::pair<std::wstring, std::map<int, std::wstring>>>
       translation_;
 
-  void RegisterLogLevel(const std::wstring& log_level);
-  std::map<std::wstring, bool> level_checkbox;
-
-  void RegisterThreadId(const std::wstring& thread_id);
-  struct ThreadFilter {
-    Component container = Container::Vertical({});
-    std::map<std::wstring, bool> checkboxes;
-  };
-  std::map<int, std::unique_ptr<ThreadFilter>> thread_filters_;
-  std::vector<int> thread_filters_order_;
-
   int tab_selected_ = 0;
   std::vector<std::wstring> tab_entries_ = {
       L"Search",
@@ -61,15 +50,25 @@ class MainComponent : public ComponentBase {
   Component info_component_ = Make<InfoComponent>();
   Component container_search_selector_ = Input(&m_search_selector, "", InputOption{.multiline=false, .on_change=[&](){
   }, .on_enter = [&](){
-    if (!m_search_selector.empty()) m_session.fetch(m_search_selector);
+    if (!m_search_selector.empty()) {
+      m_session.fetch(m_search_selector);
+    }
   }});
   Component btn_search_ = Button("Search", [&]{
-        if (!m_search_selector.empty()) m_session.fetch(m_search_selector);
+        if (!m_search_selector.empty()) {
+          m_session.fetch(m_search_selector);
+        }
       }, ButtonOption::Ascii());
   Component text_box_ = Input(&m_text, InputOption{.multiline = true});
   Component btn_exit_ = Button("Exit", m_screen_exit_, ButtonOption::Ascii());
   Component m_btn_copy_ = Button("Copy", [](){}, ButtonOption::Ascii());
-  Component m_btn_clear_ = Button("Clear", [](){}, ButtonOption::Ascii());
+  Component m_btn_clear_ = Button("Clear", [&](){
+        m_search_selector.clear();
+      }, ButtonOption::Ascii());
+
+  Component m_test = Renderer([&] {
+    return window(text("Fetching status"),  text(m_session.isFetchInProgress()?"In progress":"Failed: " + m_session.getLastFetchStatus().m_message)| color(m_session.getLastFetchStatus().m_code!=0?Color::Red:Color::Yellow));
+  }) | Maybe([&] { return m_session.isFetchInProgress() || m_session.getLastFetchStatus().m_code != 0; });
 
   Session& m_session;
 };

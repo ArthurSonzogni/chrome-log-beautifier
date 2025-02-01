@@ -29,13 +29,15 @@ std::map<std::wstring, LogStyle> log_style = {
 }  // namespace
 
 Element LogDisplayer::RenderLines(const std::vector<Topic>& topics) {
+  if (size != topics.size()) {
+    selected_ = 0;
+  }
   size = topics.size();
 
   Elements list;
   size_t size_type = 5;
   size_t num_size = 6;
-  //int size_file = 10;
-  //int thread_size = 6;
+
 
   for (auto& it : topics) {
     size_type = std::max(size_type, it.m_topic_type.length());
@@ -43,11 +45,11 @@ Element LogDisplayer::RenderLines(const std::vector<Topic>& topics) {
 
 
   auto header = hbox({
-      text(L"Type") | ftxui::size(WIDTH, EQUAL, size_type),
+      text("Type") | ftxui::size(WIDTH, EQUAL, size_type),
       separator(),
-      text(L"Num") | ftxui::size(WIDTH, EQUAL, num_size),
+      text("Size") | ftxui::size(WIDTH, EQUAL, num_size),
       separator(),
-      text(L"Message") | flex,
+      text("Topic path") | flex,
       separator(),
       text(L"Time") | dim | ftxui::size(WIDTH, EQUAL, 14),
   });
@@ -66,15 +68,9 @@ Element LogDisplayer::RenderLines(const std::vector<Topic>& topics) {
     Decorator level_decorator = nothing; //log_style[it->level].level_decorator;
 
     if (is_focus) {
-
-      //using convert_type = std::codecvt_utf8<wchar_t>;
-      //std::wstring_convert<convert_type, wchar_t> converter;
-
-      //use converter (.to_bytes: wstr->str, .from_bytes: str->wstr)
       std::stringstream ss;
       ss << CustomHexdump<32, true>(&it.m_buffer[0], it.m_buffer.size());
       m_seltext = ss.str();
-      //converter.to_bytes( it->log );
       line_decorator = line_decorator | focus;
       if (Focused())
         line_decorator = line_decorator | focus | inverted;
@@ -82,16 +78,15 @@ Element LogDisplayer::RenderLines(const std::vector<Topic>& topics) {
 
     Element document =  //
         hbox({
-            text(it.m_topic_type)                              //
-                | ftxui::size(WIDTH, EQUAL, size_type)  //
-                | level_decorator                        //
+            text(it.m_topic_type)
+                | ftxui::size(WIDTH, EQUAL, size_type)
+                | level_decorator
             ,
             separator(),
-            text(std::to_string(index - 1))                //
-                | ftxui::size(WIDTH, EQUAL, num_size)  //
+            text(std::to_string(it.m_buffer.size()))
+                | ftxui::size(WIDTH, EQUAL, num_size)
                 | notflex,
             separator(),
-
             //hbox({
             //    text(it->file),
             //    text(it->line)  //
@@ -123,9 +118,9 @@ Element LogDisplayer::RenderLines(const std::vector<Topic>& topics) {
   }
 
   if (list.empty())
-    list.push_back(text(L"(empty)"));
+    list.push_back(text("(empty)"));
 
-  return window(text(L"Log"), vbox({
+  return window(text("Topics list"), vbox({
                                   header,
                                   separator(),
                                   vbox(list) | yframe,
@@ -137,9 +132,6 @@ bool LogDisplayer::OnEvent(Event event) {
     return false;
 
   int old_selected = selected_;
-  if (event.is_mouse() && event.mouse().button == Mouse::Left) {
-    //auto m = CaptureMouse(event);
-  }
 
   if (event == Event::ArrowUp || event == Event::Character('k'))
     selected_--;

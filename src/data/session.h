@@ -13,7 +13,7 @@
 #include "diffusion.h"
 
 struct Error {
-  int m_code;
+  int m_code{0};
   std::string m_message;
 };
 
@@ -54,6 +54,17 @@ public:
   const std::vector<Topic>& getFetchedTopics() const {
     return m_topics;
   }
+
+  const Error getLastFetchStatus() {
+    std::lock_guard<std::mutex> lk(m_fetchMtx);
+    return m_fetchStatus;
+  }
+
+  bool isFetchInProgress() {
+    std::lock_guard<std::mutex> lk(m_fetchMtx);
+    return m_fetch_in_progress;
+  }
+
   ~Session();
   Session(const Session&) = delete;
   Session& operator=(const Session) = delete;
@@ -67,6 +78,8 @@ public:
   FetchCompleted m_fetch_completed_callback;
   FetchError  m_fetch_error_callback;
   std::mutex m_fetchMtx;
+  bool m_fetch_in_progress;
+  Error m_fetchStatus;
   std::string m_selector;
 };
 

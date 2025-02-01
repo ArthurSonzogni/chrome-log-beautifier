@@ -37,6 +37,7 @@ set(CMAKE_CXX_FLAGS_RELWITHDEBINFO  "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -Wall -fP
 link_directories(${PROJECT_SOURCE_DIR}/diffusion/lib)
 link_directories(${PROJECT_SOURCE_DIR}/diffusion/lib)
 include_directories(${PROJECT_SOURCE_DIR}/diffusion/include)
+include_directories(${PROJECT_SOURCE_DIR}/spdlog)
 
 # openssl
 set(OPENSSL_USE_STATIC_LIBS TRUE)

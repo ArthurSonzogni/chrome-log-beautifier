@@ -5,8 +5,8 @@
 #include <mutex>
 #include <vector>
 #include <memory>
-#include <iostream>
 #include "session.h"
+#include "spdlog/spdlog.h"
 
 std::string getSessionIdAsString(const SESSION_ID_T* session_id)
 {
@@ -215,6 +215,7 @@ Session& Session::getSession() {
 Session::Session() : m_session(nullptr)
       , m_fetch_completed_callback(nullptr)
       , m_fetch_error_callback(nullptr)
+      , m_fetch_in_progress(false)
 {
 
 }
@@ -271,7 +272,20 @@ bool Session::connect(const std::string& url, const std::string& principal, cons
 
 void Session::fetch(const std::string& selector)
 {
-    if (m_session) {
+    // for testing purposes only
+    if (!m_session) {
+        m_fetch_in_progress = true;
+        for (int i = 0; i < 10; ++i) {
+          m_topics.emplace_back("TOPIC_LOAD",
+                                gen_random(40), nullptr, 0);
+        }
+        //onFetchCompleted(nullptr);
+        onFetchError(Error{12, "Connection failed"});
+        return;
+    }
+
+    std::lock_guard<std::mutex> lk(m_fetchMtx);
+    if (m_session  && !m_fetch_in_progress) {
         FETCH_PARAMS_T params;
         params.on_fetch = &on_fetch;
         params.on_topic_message = &on_topic;
@@ -281,15 +295,11 @@ void Session::fetch(const std::string& selector)
         params.on_discard = &on_fetch_discard;
         params.context = this;
         m_selector = selector;
+        m_fetchStatus = Error{0, std::string()};
+        m_fetch_in_progress = true;
         ::fetch(m_session, params);
-        std::cout << "fetch\n";
-    }
-    else {
-        for (int i = 0; i < 10; ++i) {
-          m_topics.emplace_back("TOPIC_LOAD",
-                                gen_random(40), nullptr, 0);
-        }
-        onFetchCompleted(nullptr);
+    } else {
+        spdlog::warn("fetch started without connection or when fetch in progress");
     }
 }
 
@@ -299,16 +309,24 @@ void Session::onFetchTopic(Topic&& t) {
 }
 
 void Session::onFetchError(Error error) {
-
+  {
+        std::lock_guard<std::mutex> lk(m_fetchMtx);
+        m_fetchStatus = error;
+        m_fetch_in_progress = false;
+  }
   if (m_fetch_error_callback) {
     m_fetch_error_callback(error);
   }
 }
 
 void Session::onFetchCompleted(void*) {
-    if (m_fetch_completed_callback) {
-        m_fetch_completed_callback();
-    }
+  {
+    std::lock_guard<std::mutex> lk(m_fetchMtx);
+    m_fetch_in_progress = false;
+  }
+  if (m_fetch_completed_callback) {
+      m_fetch_completed_callback();
+  }
 }
 
 void Session::setFetchCompletedCallback(FetchCompleted&& fc) {

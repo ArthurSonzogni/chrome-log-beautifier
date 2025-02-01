@@ -54,7 +54,6 @@ class MainComponent : public ComponentBase {
       L"Info",
   };
   Component toggle_ = Toggle(&tab_entries_, &tab_selected_);
-
   Component container_level_filter_ = Container::Vertical({});
   Component container_thread_filter_ = Container::Horizontal({});
   std::shared_ptr<LogDisplayer> log_displayer_1_;
@@ -62,10 +61,10 @@ class MainComponent : public ComponentBase {
   Component info_component_ = Make<InfoComponent>();
   Component container_search_selector_ = Input(&m_search_selector, "", InputOption{.multiline=false, .on_change=[&](){
   }, .on_enter = [&](){
-    // run search
+    if (!m_search_selector.empty()) m_session.fetch(m_search_selector);
   }});
   Component btn_search_ = Button("Search", [&]{
-        m_session.fetch(m_search_selector);
+        if (!m_search_selector.empty()) m_session.fetch(m_search_selector);
       }, ButtonOption::Ascii());
   Component text_box_ = Input(&m_text, InputOption{.multiline = true});
   Component btn_exit_ = Button("Exit", m_screen_exit_, ButtonOption::Ascii());

@@ -5,6 +5,9 @@
 #include <ftxui/component/event.hpp>
 #include <map>
 
+#include <locale>
+#include <codecvt>
+
 namespace {
 struct LogStyle {
   Decorator level_decorator;
@@ -26,46 +29,51 @@ std::map<std::wstring, LogStyle> log_style = {
 };
 }  // namespace
 
-Element LogDisplayer::RenderLines(std::vector<ParsedLine*> lines) {
-  size = lines.size();
+Element LogDisplayer::RenderLines(const std::vector<Topic>& topics) {
+  size = topics.size();
 
   Elements list;
-  int size_level = 5;
-  int size_file = 10;
-  int thread_size = 6;
+  size_t size_type = 5;
+  size_t num_size = 6;
+  //int size_file = 10;
+  //int thread_size = 6;
 
-  for (auto& it : lines) {
-    size_level = std::max(size_level, (int)it->level.size());
-    size_file = std::max(size_file, (int)it->file.size());
-    thread_size = std::max(thread_size, (int)it->translated_thread_id.size());
+  for (auto& it : topics) {
+    size_type = std::max(size_type, it.m_topic_type.length());
   }
-  size_file+=5;
+
 
   auto header = hbox({
-      text(L"Type") | ftxui::size(WIDTH, EQUAL, size_level),
+      text(L"Type") | ftxui::size(WIDTH, EQUAL, size_type),
       separator(),
-      text(L"Thread") | ftxui::size(WIDTH, EQUAL, thread_size),
-      separator(),
-      text(L"File") | ftxui::size(WIDTH, EQUAL, size_file),
+      text(L"Num") | ftxui::size(WIDTH, EQUAL, num_size),
       separator(),
       text(L"Message") | flex,
       separator(),
       text(L"Time") | dim | ftxui::size(WIDTH, EQUAL, 14),
   });
 
-  int previous_type = lines.size() ? lines[0]->type : -1;
+  auto previous_type = topics.size() ? topics[0].m_topic_type : "";
 
   int index = 0;
-  for (auto& it : lines) {
+  for (auto& it : topics) {
     bool is_focus = (index++ == selected_);
-    if (previous_type != it->type)
+    if (previous_type != it.m_topic_type)
       list.push_back(separator());
-    previous_type = it->type;
+    previous_type = it.m_topic_type;
 
-    Decorator line_decorator = log_style[it->level].line_decorator;
-    Decorator level_decorator = log_style[it->level].level_decorator;
+    LogStyle ls = ((index % 2) == 0)?LogStyle{color(Color::GrayLight), dim}:LogStyle{color(Color::GrayDark), dim};
+    Decorator line_decorator =  ls.level_decorator;//log_style[it->level].line_decorator;
+    Decorator level_decorator = nothing; //log_style[it->level].level_decorator;
 
     if (is_focus) {
+
+      using convert_type = std::codecvt_utf8<wchar_t>;
+      std::wstring_convert<convert_type, wchar_t> converter;
+
+      //use converter (.to_bytes: wstr->str, .from_bytes: str->wstr)
+      m_seltext = "Content " + std::to_string(index - 1) + ": " + it.m_path;
+      //converter.to_bytes( it->log );
       line_decorator = line_decorator | focus;
       if (Focused())
         line_decorator = line_decorator | focus | inverted;
@@ -73,37 +81,36 @@ Element LogDisplayer::RenderLines(std::vector<ParsedLine*> lines) {
 
     Element document =  //
         hbox({
-            text(it->level)                              //
-                | ftxui::size(WIDTH, EQUAL, size_level)  //
+            text(it.m_topic_type)                              //
+                | ftxui::size(WIDTH, EQUAL, size_type)  //
                 | level_decorator                        //
             ,
             separator(),
-            text(it->translated_thread_id)                //
-                | ftxui::size(WIDTH, EQUAL, thread_size)  //
+            text(std::to_string(index - 1))                //
+                | ftxui::size(WIDTH, EQUAL, num_size)  //
                 | notflex,
             separator(),
 
-            hbox({
-                text(it->file),
-                text(it->line)  //
-                    | dim,
-            })                                          //
-                | ftxui::size(WIDTH, EQUAL, size_file)  //
-                | notflex,
+            //hbox({
+            //    text(it->file),
+            //    text(it->line)  //
+            //        | dim,
+            //})                                          //
+            //    | ftxui::size(WIDTH, EQUAL, size_file)  //
+            //    | notflex,
+            //separator(),
 
-            separator(),
-
-            text(it->log)  //
+            text(it.m_path)  //
                 | flex,
 
             separator(),
 
             hbox({
-                text(to_wstring(it->minute)),
+                text(to_wstring(0)),
                 text(L":"),
-                text(to_wstring(it->seconds)),
+                text(to_wstring(1)),
                 text(L" "),
-                text(to_wstring(it->milliseconds)),
+                text(to_wstring(0)),
                 text(L"ms"),
             })                                   //
                 | dim                            //
@@ -129,6 +136,10 @@ bool LogDisplayer::OnEvent(Event event) {
     return false;
 
   int old_selected = selected_;
+  if (event.is_mouse() && event.mouse().button == Mouse::Left) {
+    //auto m = CaptureMouse(event);
+  }
+
   if (event == Event::ArrowUp || event == Event::Character('k'))
     selected_--;
   if (event == Event::ArrowDown || event == Event::Character('j'))
@@ -137,10 +148,19 @@ bool LogDisplayer::OnEvent(Event event) {
     selected_ = (selected_ + 1) % size;
   if (event == Event::TabReverse && size)
     selected_ = (selected_ + size - 1) % size;
+  if (event == Event::PageDown)  {
+    selected_ = selected_ + 10;
+  }
+
+  if (event == Event::PageUp)  {
+    selected_ = selected_ - 10;
+  }
 
   selected_ = std::max(0, std::min(size-1, selected_));
 
   if (selected_ != old_selected) {
+    // hack
+    m_parent.Render();
     return true;
   }
 

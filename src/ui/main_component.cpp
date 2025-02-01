@@ -4,64 +4,51 @@
 #include <ftxui/component/component.hpp>
 #include <ftxui/screen/string.hpp>
 #include <set>
+#include "data/session.h"
 
 using namespace ftxui;
 
-MainComponent::MainComponent(Receiver<std::wstring> receiver)
-    : receiver_(std::move(receiver)) {
+std::mutex MainComponent::test_lock;
+std::string MainComponent::test_data;
+
+MainComponent::MainComponent(Session& session, Closure&& screen_exit)
+    : m_screen_exit_(std::move(screen_exit)),
+      log_displayer_1_(Make<LogDisplayer>(*this)),
+      log_displayer_2_(Make<LogDisplayer>(*this)),
+      m_session(session) {
   Add(Container::Vertical({
       toggle_,
       Container::Tab(
           {
               Container::Vertical({
                   Container::Horizontal({
-                      container_level_filter_,
-                      container_thread_filter_,
+                      //container_level_filter_,
+                     // container_thread_filter_,
+                      container_search_selector_,
+                      btn_search_
                   }),
                   log_displayer_1_,
+                  text_box_,
+                  m_btn_copy_,
+                  m_btn_clear_
               }),
               log_displayer_2_,
               info_component_,
           },
           &tab_selected_),
+      btn_exit_
   }));
 }
 
 bool MainComponent::OnEvent(Event event) {
-  while (receiver_->HasPending()) {
-    std::wstring line;
-    receiver_->Receive(&line);
-    AddLine(line);
+  if (event == Event::Special("fetch")) {
+    std::lock_guard<std::mutex> lk(test_lock);
+    m_text = test_data;
   }
+
   return ComponentBase::OnEvent(event);
 }
 
-void MainComponent::AddLine(std::wstring line) {
-  lines_.push_back(ParsedLine::Parse(line));
-  ParsedLine& parsed_line = lines_.back();
-
-  ComputeTranslatedThreadID(parsed_line);
-  RegisterLogLevel(parsed_line.level);
-  RegisterThreadId(parsed_line.translated_thread_id);
-}
-
-void MainComponent::ComputeTranslatedThreadID(ParsedLine& parsed_line) {
-  if (parsed_line.process_id == 0) {
-    parsed_line.translated_thread_id = L" ";
-    return;
-  }
-
-  if (!translation_.count(parsed_line.process_id))
-    translation_[parsed_line.process_id].first = U'A' + translation_.size();
-  auto& translation_thread = translation_[parsed_line.process_id].second;
-  if (!translation_thread.count(parsed_line.thread_id)) {
-    translation_thread[parsed_line.thread_id] =
-        to_wstring(translation_thread.size());
-  }
-  parsed_line.translated_thread_id =
-      translation_[parsed_line.process_id].first +
-      translation_thread[parsed_line.thread_id];
-}
 
 void MainComponent::RegisterLogLevel(const std::wstring& log_level) {
   if (level_checkbox.count(log_level))
@@ -102,15 +89,8 @@ Element MainComponent::Render() {
         allowed_thread.insert(thread_id);
     }
   }
-  std::vector<ParsedLine*> filtered_lines;
-  filtered_lines.reserve(lines_.size());
 
-  for(auto it = lines_.begin(); it != lines_.end(); ++it) {
-    if (allowed_level.count(it->level) &&
-        allowed_thread.count(it->translated_thread_id)) {
-      filtered_lines.push_back(&(*it));
-    }
-  }
+  m_text = log_displayer_1_->GetSelected();
 
   Elements thread_filter_document;
   thread_filter_document.push_back(vbox({
@@ -136,18 +116,22 @@ Element MainComponent::Render() {
           ->selected();
 
   auto header = hbox({
-      text(L"chrome-log-beautifier"),
+      text(L"Diffusion monitor"),
+      separator(),
+      separator(),
       hcenter(toggle_->Render()),
+      separator(),
+      btn_exit_->Render(),
       separator(),
       text(to_wstring(current_line)),
       text(L"/"),
-      text(to_wstring(filtered_lines.size())),
+      text(to_wstring(m_session.getFetchedTopics().size())),
       text(L"  ["),
-      text(to_wstring(lines_.size())),
+      text(to_wstring(0)),
       text(L"]"),
       separator(),
       gauge(float(current_line) /
-            float(std::max(1, (int)filtered_lines.size() - 1))) |
+            float(std::max(1, (int)m_session.getFetchedTopics().size() - 1))) |
           color(Color::GrayDark),
       separator(),
       spinner(5, i++),
@@ -159,22 +143,28 @@ Element MainComponent::Render() {
         vbox({
             header,
             separator(),
-            hbox({
+            window(text(L"Selector"), hbox(text("Enter path:"), separator(), container_search_selector_->Render(), btn_search_->Render()) | notflex),
+
+            /*hbox({
                 window(text(L"Type"), container_level_filter_->Render()) |
                     notflex,
                 text(L" "),
                 window(text(L"Filter"), hbox(thread_filter_document)) | notflex,
-                filler(),
-            }) | notflex,
-            log_displayer_1_->RenderLines(filtered_lines) | flex_shrink,
+                text(L" ")
+                //window(text(L"Selector"), hbox(container_search_selector_->Render(), btn_search_->Render())) | flex,
+                //filler(),
+            }) | notflex,*/
+            log_displayer_1_->RenderLines(m_session.getFetchedTopics()) | flex_shrink,
+            window(text("Content"), hbox(text_box_->Render() | size(ftxui::HEIGHT, ftxui::EQUAL, 6) | xflex_grow, vbox(m_btn_copy_->Render(), m_btn_clear_->Render())))
         });
   }
 
+  std::vector<Topic> dummy;
   if (tab_selected_ == 1) {
     return  //
         vbox({
             header,
-            log_displayer_2_->RenderLines(filtered_lines) | flex_shrink,
+            log_displayer_2_->RenderLines(dummy) | flex_shrink,
             filler(),
         });
   }
